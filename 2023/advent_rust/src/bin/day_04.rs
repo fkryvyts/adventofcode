@@ -2,8 +2,6 @@ use regex::Regex;
 use std::collections::HashMap;
 use std::fs;
 
-// 6284877
-
 fn main() {
     let data = fs::read_to_string("inputs/day_04.txt").expect("Unable to read file");
     let rows: Vec<&str> = data.trim().split("\n").collect();
@@ -56,14 +54,7 @@ fn parse_card(card_copies: &mut HashMap<u64, u64>, num_re: &Regex, line: &str) -
     };
 
     for i in card_num + 1..=card_num + res {
-        match card_copies.get(&i) {
-            Some(val) => {
-                card_copies.insert(i, val + copies);
-            }
-            _ => {
-                card_copies.insert(i, copies);
-            }
-        }
+        *(card_copies.entry(i).or_default()) += copies;
     }
 
     copies
